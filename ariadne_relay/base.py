@@ -126,7 +126,7 @@ def create_connection_resolver(
         data = resolver(obj, info, connection_args, **kwargs)
         if asyncio.iscoroutine(data):
             data = await data
-        connection = factory(data, connection_args)
+        connection = factory(data, connection_args, ctx=info)
         if asyncio.iscoroutine(connection):
             connection = await cast(Awaitable[Any], connection)
         return connection
@@ -151,6 +151,6 @@ def create_connection_resolver_sync(
             after=after, before=before, first=first, last=last
         )
         data = resolver(obj, info, connection_args, **kwargs)
-        return factory(data, connection_args)
+        return factory(data, connection_args, ctx=info)
 
     return resolve_connection
